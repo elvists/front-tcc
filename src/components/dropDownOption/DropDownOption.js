@@ -19,7 +19,7 @@ class DropDownOption extends Component {
     mountOptions(){
         var localOptionsComponent = []
         this.props.options.forEach(element => {
-            localOptionsComponent.push(<option value={element}>{element}</option>)
+            localOptionsComponent.push(<option value={element.value}>{element.label}</option>)
         });
         this.setState({ optionsComponent: localOptionsComponent })
     }
