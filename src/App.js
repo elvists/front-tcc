@@ -6,7 +6,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Configuration/>
+        <div className="Card">
+
+          <Configuration />
+        </div>
       </div>
     );
   }

@@ -1,0 +1,22 @@
+.DropDownOption {
+    position: relative;
+    opacity: 1;
+    font-size: 14px;
+    letter-spacing: 0px;
+    font-weight: 500;
+    margin: 0px;
+    padding-left: 16px;
+    -webkit-appearance: menulist-button;
+    padding-top: 10px ;
+    height: 30px;
+}
+
+select {
+    width: 200px;
+    height: 30px;
+}
+
+.box {
+    padding-left: 20px;
+    float: right;
+}
