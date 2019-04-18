@@ -2,14 +2,16 @@ import React from "react";
 import "./Popup.css";
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
-
+import {
+  BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+} from 'recharts';
 
 class Popup extends React.Component {
 
   constructor() {
     super()
     this.state = {
+      barComponent: [],
       resultComponent: []
     }
   }
@@ -19,27 +21,15 @@ class Popup extends React.Component {
   }
 
   mountResult() {
-    var localresultComponent = []
-    if (this.props.isItemRanking) {
-      localresultComponent.push(
-
-        <MuiThemeProvider key="multi">
-          <div key="div-result">
-            {"AUC"}: {this.props.result.auc} <br/>
-            {"MAP"}: {this.props.result.map} <br/>
-            {"MRR"}: {this.props.result.mrr} <br/>
-            {"NDCG"}: {this.props.result.ndcg} <br/>
-            {"PREC5"}: {this.props.result.prec5} <br/>
-            {"PREC10"}: {this.props.result.prec10} <br/>
-            {"RECALL5"}: {this.props.result.recall5} <br/>
-            {"RECALL10"}: {this.props.result.recall10} <br/>
-          </div>
-        </MuiThemeProvider>
-      )
-    } else {
-
-    }
-    this.setState({ resultComponent: localresultComponent })
+    var localresultComponent, localBarComponent = []
+    var cores = ["#1334d8","#148214","#e24b22","#69ceb8" ]
+    var i =0
+    this.props.result.algoritmos.forEach(element => {
+      localBarComponent.push(<Bar dataKey={element}  fill={cores[i]} />);
+      i++;
+    });
+    
+    this.setState({ resultComponent: localresultComponent, barComponent: localBarComponent })
   }
 
 
@@ -49,6 +39,23 @@ class Popup extends React.Component {
         <div className='popup_inner' style={{ "overflow": "auto" }} >
           <div >
             {this.state.resultComponent}
+          </div>
+          <div>
+            <BarChart
+              width={800}
+              height={400}
+              data={this.props.result.resultado}
+              margin={{
+                top: 5, right: 30, left: 20, bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              {this.state.barComponent}
+            </BarChart>
           </div>
           <button onClick={this.props.closePopup} style={{ "margin": 20 }}>Fechar</button>
         </div>

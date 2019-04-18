@@ -11,30 +11,36 @@ class DropDownOption extends Component {
         }
     }
 
-    componentWillMount () {
-        this.mountOptions();
-     }
-  
-    mountOptions(){
+    componentWillMount() {
+        this.mountOptions(this.props);
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.mountOptions(nextProps)
+      }
+
+    mountOptions(props) {
         var localOptionsComponent = []
         localOptionsComponent.push(<option key={Math.random()} value="">{"Selecione"}</option>)
-        this.props.item.itemOptions.forEach(element => {
-            localOptionsComponent.push(<option key={Math.random()} value={element.value}>{element.label}</option>)
-        });
+        if (typeof props.item !== undefined && props.item.itemOptions !== undefined && props.item.itemOptions.length > 0) {
+            props.item.itemOptions.forEach(element => {
+                localOptionsComponent.push(<option key={Math.random()} value={element.value}>{element.label}</option>)
+            });
+        }
         this.setState({ optionsComponent: localOptionsComponent })
     }
-    
+
     handleChange(event) {
-        this.setState({selected: event.target.value}, () => {
+        this.setState({ selected: event.target.value }, () => {
             this.props.changeOption(this.state.selected)
         });
     }
 
     render() {
         return (
-            <div  className="DropDownOption">
+            <div className="DropDownOption">
                 {this.props.item.itemLabel}
-                <div className="box"> 
+                <div className="box">
                     <select value={this.state.selected} onChange={this.handleChange.bind(this)}>
                         {this.state.optionsComponent}
                     </select>
@@ -44,15 +50,15 @@ class DropDownOption extends Component {
     }
 }
 
-DropDownOption.propTypes = {
-    item: PropTypes.shape({
-        itemLabel: PropTypes.string.isRequired,
-        itemOptions: PropTypes.arrayOf(PropTypes.shape({
-            label: PropTypes.string.isRequired,
-            value: PropTypes.string.isRequired,
-          })).isRequired
-    }).isRequired
-}
+// DropDownOption.propTypes = {
+//     item: PropTypes.shape({
+//         itemLabel: PropTypes.string.isRequired,
+//         itemOptions: PropTypes.arrayOf(PropTypes.shape({
+//             label: PropTypes.string.isRequired,
+//             value: PropTypes.string.isRequired,
+//         })).isRequired
+//     }).isRequired
+// }
 
-export default DropDownOption;       
+export default DropDownOption;
 

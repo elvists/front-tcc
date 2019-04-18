@@ -11,34 +11,14 @@ class Configuration extends Component {
         }
 
     }
-    togglePopup() {
-        this.setState({
-          texto: "",
-          showPopup: !this.state.showPopup
-        });
-    }
-
-
-    changeAlgorithm(event) {
-        this.setState({ recommender: event }, () => {
-            this.afterSetStateFinished();
-        });
-    }
-
-
-
-    afterSetStateFinished() {
-    }
-
-
 
     render() {
         return (
-                <div>
-                    <DropDownOption changeOption={this.changeAlgorithm.bind(this)} item={this.props.algorithms} />
-                    {/* <DropDownOption changeOption={this.changeDataSet.bind(this)} item={datasets} />
+            <div>
+                <DropDownOption changeOption={this.props.changeAlgorithm} item={this.props.algorithms} />
+                {/* <DropDownOption changeOption={this.changeDataSet.bind(this)} item={datasets} />
                     <DropDownOption changeOption={this.changeItemRanking.bind(this)} item={itemRanking} /> */}
-                </div>
+            </div>
         );
     }
 }
