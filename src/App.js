@@ -15,7 +15,7 @@ var algorithmsRankingPred = { itemLabel: "Algoritmo", itemOptions: [{ label: "MÃ
 var datasets = { itemLabel: "Conjunto de Dados", itemOptions: [{ label: "Filmes", value: "datasets/FilmTrust/ratings.txt" }] }
 var itemRanking = { itemLabel: "ItemRanking?", itemOptions: [{ label: "Sim", value: "on" }, { label: "NÃ£o", value: "off" }] }
 
-var apiBaseUrl = "http://localhost:8080/";
+var apiBaseUrl = "http://35.224.162.6/";
 
 class App extends Component {
 
