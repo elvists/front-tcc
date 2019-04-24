@@ -38,10 +38,7 @@ class App extends Component {
   }
 
   execute() {
-    this.setState({
-      showPopup: true,
-      loading: true
-    })
+    
     var self = this;
     var payload = []
     if (this.state.recommender1 !== '') {
@@ -94,7 +91,10 @@ class App extends Component {
       alert("É preciso selecionar dois ou mais algoritmos!")
       return
     }
-
+    this.setState({
+      showPopup: true,
+      loading: true
+    })
     Axios.post(apiBaseUrl + 'recomendar', payload)
       .then(function (response) {
         if (response.status === 200) {
@@ -184,7 +184,7 @@ class App extends Component {
         <Row>
           <Col md={{ size: 6, offset: 3 }} xs="12" sm="12">
             <Card >
-              <div class="card-title-div"><CardTitle>Confirações Gerais</CardTitle></div>
+              <div class="card-title-div"><CardTitle>Configurações Gerais</CardTitle></div>
               <CardBody>
                 <DropDownOption changeOption={this.changeDataSet.bind(this)} item={datasets} />
                 <DropDownOption changeOption={this.changeItemRanking.bind(this)} item={itemRanking} />
@@ -195,7 +195,7 @@ class App extends Component {
         <Row>
           <Col xs="12" sm="12" md="6">
             <Card>
-            <div class="card-title-div"><CardTitle>Confirações do Algoritmo 1</CardTitle></div>
+            <div class="card-title-div"><CardTitle>Configurações do Algoritmo 1</CardTitle></div>
               <CardBody>
                 <Configuration algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm1.bind(this)} />
               </CardBody>
@@ -203,7 +203,7 @@ class App extends Component {
           </Col>
           <Col xs="12" sm="12" md="6">
             <Card>
-            <div class="card-title-div"><CardTitle>Confirações do Algoritmo 2</CardTitle></div>
+            <div class="card-title-div"><CardTitle>Configurações do Algoritmo 2</CardTitle></div>
               <CardBody>
                 <Configuration algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm2.bind(this)} />
               </CardBody>
@@ -211,7 +211,7 @@ class App extends Component {
           </Col>
           <Col xs="12" sm="12" md="6">
             <Card>
-            <div class="card-title-div"><CardTitle>Confirações do Algoritmo 3</CardTitle></div>
+            <div class="card-title-div"><CardTitle>Configurações do Algoritmo 3</CardTitle></div>
               <CardBody>
                 <Configuration algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm3.bind(this)} />
               </CardBody>
@@ -220,7 +220,7 @@ class App extends Component {
 
           <Col xs="12" sm="12" md="6">
             <Card>
-            <div class="card-title-div"><CardTitle>Confirações do Algoritmo 4</CardTitle></div>
+            <div class="card-title-div"><CardTitle>Configurações do Algoritmo 4</CardTitle></div>
               <CardBody>
                 <Configuration algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm4.bind(this)} />
               </CardBody>

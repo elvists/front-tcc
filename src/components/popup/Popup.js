@@ -1,8 +1,8 @@
 import React from "react";
 import "./Popup.css";
+import { Button } from 'reactstrap';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import {
   BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
@@ -14,7 +14,9 @@ class Popup extends React.Component {
     this.state = {
       loading: true,
       barComponent: [],
-      resultComponent: []
+      resultComponent: [],
+      width: 0,
+      height: 0
     }
   }
 
@@ -29,6 +31,9 @@ class Popup extends React.Component {
   }
 
   mountResult(loading, result) {
+    var w = window.innerWidth - window.innerWidth / 8;
+    var h = window.innerHeight - window.innerHeight / 4;
+    console.log(h, w)
     if (loading === false) {
       var localresultComponent, localBarComponent = []
       var cores = ["#1334d8", "#148214", "#e24b22", "#69ceb8"]
@@ -38,7 +43,7 @@ class Popup extends React.Component {
         i++;
       });
 
-      this.setState({ resultComponent: localresultComponent, barComponent: localBarComponent })
+      this.setState({ resultComponent: localresultComponent, barComponent: localBarComponent, width: w, height: h })
     }
   }
 
@@ -53,9 +58,10 @@ class Popup extends React.Component {
               {this.state.resultComponent}
             </div>
             <div>
-              <BarChart
-                width={800}
-                height={400}
+              <BarChart className="Chart"
+                layout="horizontal"
+                width={this.state.width}
+                height={this.state.height}
                 data={this.props.result.resultado}
                 margin={{
                   top: 5, right: 30, left: 20, bottom: 5,
@@ -69,7 +75,7 @@ class Popup extends React.Component {
                 {this.state.barComponent}
               </BarChart>
             </div>
-            <button onClick={this.props.closePopup} style={{ "margin": 20 }}>Fechar</button>
+            <Button className="Button" color="primary" onClick={this.props.closePopup} style={{ "margin": 20 }}>Fechar</Button>
           </div>}
       </div>
     );
