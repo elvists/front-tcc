@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import './DropDownOption.css'
+import { Button, Card, CardBody, CardGroup, Col, CardTitle, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 
 class DropDownOption extends Component {
     constructor(props) {
@@ -15,9 +16,9 @@ class DropDownOption extends Component {
         this.mountOptions(this.props);
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         this.mountOptions(nextProps)
-      }
+    }
 
     mountOptions(props) {
         var localOptionsComponent = []
@@ -38,14 +39,18 @@ class DropDownOption extends Component {
 
     render() {
         return (
-            <div className="DropDownOption">
-                {this.props.item.itemLabel}
-                <div className="box">
-                    <select value={this.state.selected} onChange={this.handleChange.bind(this)}>
+            <Row>
+                <Col xs="12" sm="6" md="6" className="label">
+                    {this.props.item.itemLabel}
+                </Col>
+
+                <Col xs="12" sm="6" md="6" className="box">
+                    <select className="Select" value={this.state.selected} onChange={this.handleChange.bind(this)}>
                         {this.state.optionsComponent}
                     </select>
-                </div>
-            </div>
+                </Col>
+
+            </Row>
         );
     }
 }

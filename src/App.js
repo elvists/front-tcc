@@ -9,12 +9,13 @@ import Popup from './components/popup/Popup';
 import DropDownOption from './components/dropDownOption/DropDownOption'
 
 // import { Link } from 'react-router-dom';
-import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Button, Card, CardBody, CardGroup, Col, CardTitle, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 
-var algorithms = { itemLabel: "Algoritmo", itemOptions: [{ label: "Média Global", value: "GlobalAvg" }, { label: "Média dos Itens", value: "ItemAvg" }] }
-var algorithmsRankingPred = { itemLabel: "Algoritmo", itemOptions: [{ label: "Média Global", value: "GlobalAvg" }, { label: "AR", value: "AR" }, { label: "Média dos Itens", value: "ItemAvg" }, { label: "Mais Popular", value: "MostPop" }] }
-var datasets = { itemLabel: "Conjunto de Dados", itemOptions: [{ label: "Filmes", value: "datasets/FilmTrust/ratings.txt" }] }
-var itemRanking = { itemLabel: "ItemRanking?", itemOptions: [{ label: "Sim", value: "on" }, { label: "Não", value: "off" }] }
+var algorithms = { itemLabel: "Algoritmo:", itemOptions: [{ label: "Média Global", value: "GlobalAvg" }, { label: "Média dos Itens", value: "ItemAvg" }] }
+var algorithmsEmpty = { itemLabel: "Algoritmo:" }
+var algorithmsRankingPred = { itemLabel: "Algoritmo:", itemOptions: [{ label: "Média Global", value: "GlobalAvg" }, { label: "AR", value: "AR" }, { label: "Média dos Itens", value: "ItemAvg" }, { label: "Mais Popular", value: "MostPop" }] }
+var datasets = { itemLabel: "Conjunto de Dados:", itemOptions: [{ label: "Filmes", value: "datasets/FilmTrust/ratings.txt" }] }
+var itemRanking = { itemLabel: "ItemRanking?:", itemOptions: [{ label: "Sim", value: "on" }, { label: "Não", value: "off" }] }
 
 var apiBaseUrl = "http://35.224.162.6/";
 
@@ -24,11 +25,12 @@ class App extends Component {
     super();
     this.state = {
       loading: false,
-      dataAlgo: [],
+      dataAlgo: algorithmsEmpty,
       dataset: "",
       recommender1: "",
       recommender2: "",
       recommender3: "",
+      recommender4: "",
       itemRanking: "",
       showPopup: false
     }
@@ -74,6 +76,18 @@ class App extends Component {
         "ratingSetup": "-columns 0 1 2 -threshold -1"
       }
       payload.push(recommender3)
+    }
+
+    if (this.state.recommender4 !== '') {
+      var recommender4 = {
+        "dataset": this.state.dataset,
+        "recommender": this.state.recommender4,
+        "evaluationSetup": "cv -k 5 -p on --rand-seed 1 --test-view all",
+        "itemRanking": this.state.itemRanking + " -topN -1 -ignore -1",
+        "outputSetup": "on -dir results/",
+        "ratingSetup": "-columns 0 1 2 -threshold -1"
+      }
+      payload.push(recommender4)
     }
 
     if (payload.length < 2) {
@@ -124,12 +138,13 @@ class App extends Component {
 
 
   changeItemRanking(event) {
-    this.setState({ 
+    this.setState({
       itemRanking: event,
       recommender1: "",
       recommender2: "",
-      recommender3: ""
-     }, () => {
+      recommender3: "",
+      recommender4: ""
+    }, () => {
       this.afterchangeItemRanking(event);
     });
   }
@@ -157,41 +172,63 @@ class App extends Component {
       this.afterSetStateFinished();
     });
   }
+  changeAlgorithm4(event) {
+    this.setState({ recommender4: event }, () => {
+      this.afterSetStateFinished();
+    });
+  }
 
   render() {
     return (
       <div className="App">
-        <Card>
-          <CardBody>
-            <DropDownOption changeOption={this.changeDataSet.bind(this)} item={datasets} />
-            <DropDownOption changeOption={this.changeItemRanking.bind(this)} item={itemRanking} />
-          </CardBody>
-        </Card>
         <Row>
-          <Col sm="4">
+          <Col md={{ size: 6, offset: 3 }} xs="12" sm="12">
+            <Card >
+              <div class="card-title-div"><CardTitle>Confirações Gerais</CardTitle></div>
+              <CardBody>
+                <DropDownOption changeOption={this.changeDataSet.bind(this)} item={datasets} />
+                <DropDownOption changeOption={this.changeItemRanking.bind(this)} item={itemRanking} />
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs="12" sm="12" md="6">
             <Card>
+            <div class="card-title-div"><CardTitle>Confirações do Algoritmo 1</CardTitle></div>
               <CardBody>
                 <Configuration algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm1.bind(this)} />
               </CardBody>
             </Card>
           </Col>
-          <Col sm="4">
+          <Col xs="12" sm="12" md="6">
             <Card>
+            <div class="card-title-div"><CardTitle>Confirações do Algoritmo 2</CardTitle></div>
               <CardBody>
                 <Configuration algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm2.bind(this)} />
               </CardBody>
             </Card>
           </Col>
-          <Col sm="4">
+          <Col xs="12" sm="12" md="6">
             <Card>
+            <div class="card-title-div"><CardTitle>Confirações do Algoritmo 3</CardTitle></div>
               <CardBody>
                 <Configuration algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm3.bind(this)} />
               </CardBody>
             </Card>
           </Col>
+
+          <Col xs="12" sm="12" md="6">
+            <Card>
+            <div class="card-title-div"><CardTitle>Confirações do Algoritmo 4</CardTitle></div>
+              <CardBody>
+                <Configuration algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm4.bind(this)} />
+              </CardBody>
+            </Card>
+          </Col>
         </Row>
 
-        <Button color="primary" onClick={this.execute.bind(this)}>Executar</Button>
+        <Button className="Button" color="primary" onClick={this.execute.bind(this)}>Executar</Button>
         {this.state.showPopup ?
           <Popup
             result={this.state.result}
