@@ -31,3 +31,12 @@ html, body, .App {
   margin: auto;
   background: rgb(245, 252, 252);
 }
+
+.Loading {
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+}

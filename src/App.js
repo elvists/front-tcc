@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Axios from 'axios';
 import Popup from './components/popup/Popup';
 
+
 import DropDownOption from './components/dropDownOption/DropDownOption'
 
 // import { Link } from 'react-router-dom';
@@ -22,6 +23,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      loading: false,
       dataAlgo: [],
       dataset: "",
       recommender1: "",
@@ -34,6 +36,10 @@ class App extends Component {
   }
 
   execute() {
+    this.setState({
+      showPopup: true,
+      loading: true
+    })
     var self = this;
     var payload = []
     if (this.state.recommender1 !== '') {
@@ -79,8 +85,8 @@ class App extends Component {
       .then(function (response) {
         if (response.status === 200) {
           self.setState({
-            showPopup: true,
-            result: response.data
+            result: response.data,
+            loading: false
           })
           console.log(response.data);
         } else {
@@ -104,8 +110,6 @@ class App extends Component {
   }
 
   afterchangeItemRanking(itemRanking) {
-    
-    console.log(itemRanking)
     if (itemRanking === "off") {
       this.setState({
         dataAlgo: algorithms
@@ -191,6 +195,7 @@ class App extends Component {
         {this.state.showPopup ?
           <Popup
             result={this.state.result}
+            loading={this.state.loading}
             isItemRanking={this.state.itemRanking}
             closePopup={this.togglePopup.bind(this)}
           />
