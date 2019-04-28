@@ -11,9 +11,34 @@ import DropDownOption from './components/dropDownOption/DropDownOption'
 // import { Link } from 'react-router-dom';
 import { Button, Card, CardBody, Col, CardTitle, Row } from 'reactstrap';
 
-var algorithms = { itemLabel: "Algoritmo:", itemOptions: [{ label: "Média Global", value: "GlobalAvg" }, { label: "Média dos Itens", value: "ItemAvg" }] }
+var algorithms = { itemLabel: "Algoritmo:", itemOptions: [
+  { label: "Item Cluster", value: "ItemCluster", factorsAndIter: true }, 
+  { label: "Item KNN", value: "ItemKNN", knn: true }, 
+  { label: "Média de Usuários", value: "UserAvg" }, 
+  { label: "Média dos Itens", value: "ItemAvg" }, 
+  { label: "Média Global", value: "GlobalAvg" }, 
+  { label: "NMF", value: "NMF", factorsAndIter: true }, 
+  { label: "User Cluster", value: "UserCluster", factorsAndIter: true }, 
+  { label: "User KNN", value: "UserKNN", knn: true },
+  { label: "Slope One", value: "SlopeOne" }, 
+] }
+
 var algorithmsEmpty = { itemLabel: "Algoritmo:" }
-var algorithmsRankingPred = { itemLabel: "Algoritmo:", itemOptions: [{ label: "Média Global", value: "GlobalAvg" }, { label: "AR", value: "AR" }, { label: "Média dos Itens", value: "ItemAvg" }, { label: "Mais Popular", value: "MostPop" }, { label: "Item Cluster", value: "ItemCluster", factorsAndIter: true }] }
+
+var algorithmsRankingPred = { itemLabel: "Algoritmo:", itemOptions: [
+  { label: "AR", value: "AR" }, 
+  { label: "Item Cluster", value: "ItemCluster", factorsAndIter: true }, 
+  { label: "Item KNN", value: "ItemKNN", knn: true }, 
+  { label: "Mais Popular", value: "MostPop" }, 
+  { label: "Média de Usuários", value: "UserAvg" }, 
+  { label: "Média dos Itens", value: "ItemAvg" }, 
+  { label: "Média Global", value: "GlobalAvg" }, 
+  { label: "NMF", value: "NMF", factorsAndIter: true }, 
+  { label: "User Cluster", value: "UserCluster", factorsAndIter: true }, 
+  { label: "User KNN", value: "UserKNN", knn: true },
+  { label: "Slope One", value: "SlopeOne" }, 
+] }
+
 var datasets = { itemLabel: "Conjunto de Dados:", itemOptions: [{ label: "Filmes", value: "datasets/FilmTrust/ratings.txt" }] }
 var itemRanking = { itemLabel: "ItemRanking?:", itemOptions: [{ label: "Sim", value: "on" }, { label: "Não", value: "off" }] }
 
@@ -42,8 +67,8 @@ class App extends Component {
   }
 
 
-  mountConfigAlgo(recommender, config){
-    return {
+  mountConfigAlgo(recommender, configAdd) {
+    var config = {
       "dataset": this.state.dataset,
       "recommender": recommender,
       "evaluationSetup": "cv -k 5 -p on --rand-seed 1 --test-view all",
@@ -51,6 +76,25 @@ class App extends Component {
       "outputSetup": "on -dir results/",
       "ratingSetup": "-columns 0 1 2 -threshold -1"
     }
+    if (configAdd !== undefined && configAdd !== null) {
+      if (configAdd.ite !== undefined) {
+        config.numMaxIter = configAdd.ite
+      }
+      if (configAdd.factors !== undefined) {
+        config.numFactors = configAdd.factors
+      }
+      if (configAdd.neighbors !== undefined) {
+        config.numNeighbors = configAdd.neighbors
+      }
+      if (configAdd.shrinkage !== undefined) {
+        config.numShrinkage = configAdd.shrinkage
+      }
+      if (configAdd.similarity !== undefined) {
+        config.similarity = configAdd.similarity
+      }
+    }
+    console.log(config)
+    return config
   }
 
   execute() {
@@ -58,20 +102,20 @@ class App extends Component {
     var self = this;
     var payload = []
     if (this.state.recommender1 !== '') {
-      var recommender1 = this.mountConfigAlgo(this.state.recommender1, null)
+      var recommender1 = this.mountConfigAlgo(this.state.recommender1, this.state.config1)
       payload.push(recommender1)
     }
     if (this.state.recommender2 !== '') {
-      var recommender2 = this.mountConfigAlgo(this.state.recommender2, null)
+      var recommender2 = this.mountConfigAlgo(this.state.recommender2, this.state.config2)
       payload.push(recommender2)
     }
     if (this.state.recommender3 !== '') {
-      var recommender3 = this.mountConfigAlgo(this.state.recommender3, null)
+      var recommender3 = this.mountConfigAlgo(this.state.recommender3, this.state.config3)
       payload.push(recommender3)
     }
 
     if (this.state.recommender4 !== '') {
-      var recommender4 = this.mountConfigAlgo(this.state.recommender4, null)
+      var recommender4 = this.mountConfigAlgo(this.state.recommender4, this.state.config4)
       payload.push(recommender4)
     }
 
@@ -209,7 +253,7 @@ class App extends Component {
             <Card>
               <div className="card-title-div"><CardTitle>Configurações do Algoritmo 1</CardTitle></div>
               <CardBody>
-                <Configuration algorithm={this.state.recommender1} algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm1.bind(this)}  changeConfig={this.changeConfig1.bind(this)} />
+                <Configuration algorithm={this.state.recommender1} algorithms={this.state.dataAlgo} changeAlgorithm={this.changeAlgorithm1.bind(this)} changeConfig={this.changeConfig1.bind(this)} />
               </CardBody>
             </Card>
           </Col>

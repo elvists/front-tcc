@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import DropDownOption from '../dropDownOption/DropDownOption'
 import InputOptions from '../inputOptions/InputOptions';
 
+
+const similarityList = { itemLabel: "Similaridade:", itemOptions: [{ label: "PCC", value: "PCC" }, { label: "COS", value: "COS" }, { label: "MSD", value: "MSD"}, { label: "CPC", value: "CPC"}, { label: "exJaccard", value: "exJaccard" }] }
+
 class Configuration extends Component {
 
     constructor() {
@@ -10,7 +13,7 @@ class Configuration extends Component {
             recommender: "",
             showPopup: false,
             fields: [],
-            fieldsAdditional: { ite: 1, factors: 1 }
+            fieldsAdditional: {}
 
         }
 
@@ -31,7 +34,34 @@ class Configuration extends Component {
                 ...this.state.fieldsAdditional,
                 factors: Number(value)
             }
-        }, () => { this.props.changeConfig(this.state.fieldsAdditional)  })
+        }, () => { this.props.changeConfig(this.state.fieldsAdditional) })
+    }
+
+    changeNeighbors(value) {
+        this.setState({
+            fieldsAdditional: {
+                ...this.state.fieldsAdditional,
+                neighbors: Number(value)
+            }
+        }, () => { this.props.changeConfig(this.state.fieldsAdditional) })
+    }
+
+    changeShrinkage(value) {
+        this.setState({
+            fieldsAdditional: {
+                ...this.state.fieldsAdditional,
+                shrinkage: Number(value)
+            }
+        }, () => { this.props.changeConfig(this.state.fieldsAdditional) })
+    }
+
+    changeSimilarity(similaritySelect) {
+        this.setState({
+            fieldsAdditional: {
+                ...this.state.fieldsAdditional,
+                similarity: similaritySelect
+            }
+        }, () => { this.props.changeConfig(this.state.fieldsAdditional) })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -39,6 +69,15 @@ class Configuration extends Component {
         if (nextProps.algorithms.itemOptions !== undefined && nextProps.algorithm !== this.state.recommender) {
             nextProps.algorithms.itemOptions.forEach(element => {
                 if (element.value === nextProps.algorithm) {
+                    if (element.knn) {
+                        fieldsLocal.push(
+                            <div key={Math.random()}>
+                                <DropDownOption changeOption={this.changeSimilarity.bind(this)} item={similarityList} />
+                                <InputOptions changeValue={this.changeShrinkage.bind(this)} label="Redução:" />
+                                <InputOptions changeValue={this.changeNeighbors.bind(this)} label="Vizinhos:" />
+                            </div>
+                        )
+                    }
                     if (element.factorsAndIter) {
                         fieldsLocal.push(
                             <div key={Math.random()}>
@@ -46,6 +85,8 @@ class Configuration extends Component {
                                 <InputOptions changeValue={this.changeIte.bind(this)} label="Máximo de iterações:" />
                             </div>
                         )
+                    }
+                    if (element.knn || element.factorsAndIter) {
                         this.setState({
                             recommender: nextProps.algorithm
                         })
