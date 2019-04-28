@@ -4,7 +4,7 @@ import { Button } from 'reactstrap';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {
-  BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 } from 'recharts';
 
 class Popup extends React.Component {
@@ -33,7 +33,6 @@ class Popup extends React.Component {
   mountResult(loading, result) {
     var w = window.innerWidth - window.innerWidth / 8;
     var h = window.innerHeight - window.innerHeight / 4;
-    console.log(h, w)
     if (loading === false) {
       var localresultComponent, localBarComponent = []
       var cores = ["#1334d8", "#148214", "#e24b22", "#69ceb8"]
