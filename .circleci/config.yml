@@ -35,7 +35,12 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
 
-      - run: npm test
+      - run: npm run build
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run: docker login -u $USER_DOCKER_HUB -p $PASSWORD_DOCKER_HUB	
+      - run: docker build -t elvists/tcc-front:$CIRCLE_BRANCH .
+      - run: docker push elvists/tcc-front:$CIRCLE_BRANCH
 
   # Deploying
   deploy-development:
