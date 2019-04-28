@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
 import './DropDownOption.css'
-import { Button, Card, CardBody, CardGroup, Col, CardTitle, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 
 class DropDownOption extends Component {
     constructor(props) {
@@ -45,7 +44,7 @@ class DropDownOption extends Component {
                 </Col>
 
                 <Col xs="12" sm="6" md="6" className="box">
-                    <select className="Select" value={this.state.selected} onChange={this.handleChange.bind(this)}>
+                    <select className="form-control" value={this.state.selected} onChange={this.handleChange.bind(this)}>
                         {this.state.optionsComponent}
                     </select>
                 </Col>

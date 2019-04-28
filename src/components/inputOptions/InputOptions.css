@@ -1,0 +1,23 @@
+select {
+    min-width: 170px;
+    height: 30px;
+}
+
+.Select {
+    display: block;
+    margin: 0 auto;
+}
+
+.box {
+    padding-left: 10px;
+}
+
+.row {
+    padding-top: 10px
+}
+
+.label {
+    text-align: center;
+    height: 30px;
+    min-width: 170px;
+}
