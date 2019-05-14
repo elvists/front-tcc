@@ -5,11 +5,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Axios from 'axios';
 import Popup from './components/popup/Popup';
 
-
 import DropDownOption from './components/dropDownOption/DropDownOption'
 
 // import { Link } from 'react-router-dom';
 import { Button, Card, CardBody, Col, CardTitle, Row } from 'reactstrap';
+import SwitchOption from './components/switchOption/SwitchOption';
 
 var algorithms = { itemLabel: "Algoritmo:", itemOptions: [
   { label: "Item Cluster", value: "ItemCluster", factorsAndIter: true }, 
@@ -22,8 +22,6 @@ var algorithms = { itemLabel: "Algoritmo:", itemOptions: [
   { label: "User KNN", value: "UserKNN", knn: true },
   { label: "Slope One", value: "SlopeOne" }, 
 ] }
-
-var algorithmsEmpty = { itemLabel: "Algoritmo:" }
 
 var algorithmsRankingPred = { itemLabel: "Algoritmo:", itemOptions: [
   { label: "AR", value: "AR" }, 
@@ -40,9 +38,9 @@ var algorithmsRankingPred = { itemLabel: "Algoritmo:", itemOptions: [
 ] }
 
 var datasets = { itemLabel: "Conjunto de Dados:", itemOptions: [{ label: "Filmes", value: "datasets/FilmTrust/ratings.txt" }] }
-var itemRanking = { itemLabel: "ItemRanking?:", itemOptions: [{ label: "Sim", value: "on" }, { label: "Não", value: "off" }] }
 
-var apiBaseUrl = "http://35.224.162.6/";
+// var apiBaseUrl = "http://35.224.162.6/";
+var apiBaseUrl = "http://localhost:8080/";
 
 class App extends Component {
 
@@ -50,7 +48,7 @@ class App extends Component {
     super();
     this.state = {
       loading: false,
-      dataAlgo: algorithmsEmpty,
+      dataAlgo: algorithms,
       dataset: "",
       recommender1: "",
       recommender2: "",
@@ -60,21 +58,30 @@ class App extends Component {
       config2: {},
       config3: {},
       config4: {},
-      itemRanking: "",
-      showPopup: false
+      itemRanking: true,
+      showPopup: false,
+      checked: true,
+      asyncRun: false
     }
 
   }
 
 
   mountConfigAlgo(recommender, configAdd) {
+    var itemRanking
+    if(this.state.itemRanking){
+      itemRanking = "on"
+    }else{
+      itemRanking = "off"
+    }
     var config = {
       "dataset": this.state.dataset,
       "recommender": recommender,
       "evaluationSetup": "cv -k 5 -p on --rand-seed 1 --test-view all",
-      "itemRanking": this.state.itemRanking + " -topN -1 -ignore -1",
+      "itemRanking": itemRanking + " -topN -1 -ignore -1",
       "outputSetup": "on -dir results/",
-      "ratingSetup": "-columns 0 1 2 -threshold -1"
+      "ratingSetup": "-columns 0 1 2 -threshold -1",
+      "asynchronous": this.state.asyncRun
     }
     if (configAdd !== undefined && configAdd !== null) {
       if (configAdd.ite !== undefined) {
@@ -127,6 +134,7 @@ class App extends Component {
       showPopup: true,
       loading: true
     })
+
     Axios.post(apiBaseUrl + 'recomendar', payload)
       .then(function (response) {
         if (response.status === 200) {
@@ -139,9 +147,9 @@ class App extends Component {
           console.log(response);
           alert("Erro");
         }
-      })
-      .catch(function (error) {
+      }).catch(function (error) {
         console.log(error);
+        alert("Aconteceu algum erro");
       });
   }
 
@@ -156,7 +164,7 @@ class App extends Component {
   }
 
   afterchangeItemRanking(itemRanking) {
-    if (itemRanking === "off") {
+    if (itemRanking === false) {
       this.setState({
         dataAlgo: algorithms
       });
@@ -234,8 +242,15 @@ class App extends Component {
     });
   }
 
+  
+  changeRunMethod(change) {
+      this.setState({
+        asyncRun: change
+      });
+  }
+
   render() {
-    return (
+    return ( 
       <div className="App">
         <Row>
           <Col md={{ size: 6, offset: 3 }} xs="12" sm="12">
@@ -243,7 +258,10 @@ class App extends Component {
               <div className="card-title-div"><CardTitle>Configurações Gerais</CardTitle></div>
               <CardBody>
                 <DropDownOption changeOption={this.changeDataSet.bind(this)} item={datasets} />
-                <DropDownOption changeOption={this.changeItemRanking.bind(this)} item={itemRanking} />
+                <SwitchOption changeSwitch={this.changeItemRanking.bind(this)} label={"itemRanking?:"} default={this.state.itemRanking}/>
+                <SwitchOption changeSwitch={this.changeRunMethod.bind(this)} label={"Executar Assíncrono?:"} default={this.state.asyncRun}/>
+                
+
               </CardBody>
             </Card>
           </Col>
