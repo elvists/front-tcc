@@ -39,11 +39,11 @@ class DropDownOption extends Component {
     render() {
         return (
             <Row>
-                <Col xs="12" sm="6" md="6" className="label">
+                <Col xs="12" sm="12" md="6" className="label">
                     {this.props.item.itemLabel}
                 </Col>
 
-                <Col xs="12" sm="6" md="6" className="box">
+                <Col xs="12" sm="12" md="6" className="box">
                     <select className="form-control" value={this.state.selected} onChange={this.handleChange.bind(this)}>
                         {this.state.optionsComponent}
                     </select>

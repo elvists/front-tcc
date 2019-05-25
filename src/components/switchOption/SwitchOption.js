@@ -22,12 +22,12 @@ class SwitchOption extends Component {
     render() {
         return (
             <Row>
-                <Col xs="12" sm="6" md="6" className="label">
+                <Col  xs="12" sm="8" md="8" className="label">
                     {this.props.label}
                 </Col>
 
-                <Col xs="12" sm="6" md="6" className="box">
-                    <Switch onChange={this.handleChange.bind(this)} checked={this.state.checked} />
+                <Col xs="12" sm="4" md="4" className="box">
+                    <Switch disabled={this.props.disabled} onChange={this.handleChange.bind(this)} checked={this.state.checked} />
                 </Col>
 
             </Row>

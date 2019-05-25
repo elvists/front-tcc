@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import DropDownOption from '../dropDownOption/DropDownOption'
 import InputOptions from '../inputOptions/InputOptions';
+import './Configuration.css';
 
 
-const similarityList = { itemLabel: "Similaridade:", itemOptions: [{ label: "PCC", value: "PCC" }, { label: "COS", value: "COS" }, { label: "MSD", value: "MSD"}, { label: "CPC", value: "CPC"}, { label: "exJaccard", value: "exJaccard" }] }
+const similarityList = { itemLabel: "Similaridade*:", itemOptions: [{ label: "PCC", value: "PCC" }, { label: "COS", value: "COS" }, { label: "MSD", value: "MSD" }, { label: "CPC", value: "CPC" }, { label: "exJaccard", value: "exJaccard" }] }
 
 class Configuration extends Component {
 
@@ -73,18 +74,32 @@ class Configuration extends Component {
                         fieldsLocal.push(
                             <div key={Math.random()}>
                                 <DropDownOption changeOption={this.changeSimilarity.bind(this)} item={similarityList} />
-                                <InputOptions changeValue={this.changeShrinkage.bind(this)} label="Redução:" />
-                                <InputOptions changeValue={this.changeNeighbors.bind(this)} label="Vizinhos:" />
+                                <div className="InputOptions">
+                                    <InputOptions className="InputOptions" changeValue={this.changeShrinkage.bind(this)} label="Redução:" />
+                                </div>
+                                <div className="InputOptions">
+                                    <InputOptions className="InputOptions" changeValue={this.changeNeighbors.bind(this)} label="Vizinhos:" />
+                                </div>
                             </div>
                         )
+                        this.setState({
+                            fieldsAdditional: {neighbors:1, shrinkage:1},
+                        }, () => { this.props.changeConfig(this.state.fieldsAdditional) })
                     }
                     if (element.factorsAndIter) {
                         fieldsLocal.push(
                             <div key={Math.random()}>
-                                <InputOptions changeValue={this.changeFactors.bind(this)} label="Fatores:" />
-                                <InputOptions changeValue={this.changeIte.bind(this)} label="Máximo de iterações:" />
+                                <div className="InputOptions">
+                                    <InputOptions changeValue={this.changeFactors.bind(this)} label="Fatores:" />
+                                </div>
+                                <div className="InputOptions">
+                                    <InputOptions changeValue={this.changeIte.bind(this)} label="Máximo de iterações:" />
+                                </div>
                             </div>
                         )
+                        this.setState({
+                            fieldsAdditional: {ite:1, factors:1},
+                        }, () => { this.props.changeConfig(this.state.fieldsAdditional) })
                     }
                     if (element.knn || element.factorsAndIter) {
                         this.setState({

@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import './InputOptions.css'
-import { Col, Row, Input } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
+import InputRange from 'react-input-range';
+import 'react-input-range/lib/css/index.css';
 
 class InputOptions extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: ""
+            value: 1
         }
     }
 
 
     handleChange(event) {
-        this.setState({ value: event.target.value }, () => {
+        this.setState({ value: event }, () => {
             this.props.changeValue(this.state.value)
         });
     }
@@ -25,7 +27,11 @@ class InputOptions extends Component {
                 </Col>
 
                 <Col xs="12" sm="6" md="6" className="box">
-                    <Input placeholder="Valor" min={1} max={100} type="number" defaultValue={1} onChange={this.handleChange.bind(this)} />
+                    <InputRange
+                        maxValue={100}
+                        minValue={1}
+                        value={this.state.value}
+                        onChange={this.handleChange.bind(this)} />
                 </Col>
 
             </Row>
