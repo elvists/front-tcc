@@ -43,8 +43,8 @@ var algorithmsRankingPred = {
 
 var datasets = { itemLabel: "Conjunto de Dados*:", itemOptions: [{ label: "Filmes", value: "datasets/FilmTrust/ratings.txt" }] }
 
-// var apiBaseUrl = "http://35.224.162.6/";
-var apiBaseUrl = "http://localhost:8080/";
+var apiBaseUrl = "http://35.224.162.6/";
+//var apiBaseUrl = "http://localhost:8080/";
 
 class App extends Component {
 
